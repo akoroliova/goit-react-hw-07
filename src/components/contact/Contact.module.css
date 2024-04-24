@@ -1,0 +1,23 @@
+.contactCardContainer {
+    border: solid 2px black;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.contactDataItemElement {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.contactDataIcon {
+    display: flex;
+    align-items: center;
+}
+
+.contactDeleteButtonContainer {
+    margin-left: auto;
+    padding-left: 30px;
+}
