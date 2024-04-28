@@ -1,7 +1,6 @@
 //файл для зберігання асинхронних генераторів екшенів
-//Використовуй функцію createAsyncThunk для оголошення операцій.
-
 import axios from "axios";
+//import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   fetchingInProgress,
   fetchingSuccess,
@@ -23,5 +22,10 @@ const fetchContacts = () => async (dispatch) => {
     dispatch(fetchingError(e.message));
   }
 };
+
+// const fetchContacts = createAsyncThunk("contacts/fetchAll", async () => {
+//   const response = await axios.get("/contacts");
+//   return response.data;
+// });
 
 export default fetchContacts;

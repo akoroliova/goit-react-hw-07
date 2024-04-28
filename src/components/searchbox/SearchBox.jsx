@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import css from "./SearchBox.module.css";
 
 const SearchBox = () => {
-  const searchBoxData = useSelector(selectNameFilter);
-
   const dispatch = useDispatch();
+
+  const searchBoxData = useSelector(selectNameFilter);
 
   return (
     <div className={css.searchBoxContainer}>

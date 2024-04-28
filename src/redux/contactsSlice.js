@@ -1,15 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
-
-const contactsInitialState = {
-  items: [],
-  loading: false,
-  error: null,
-};
+import { selectNameFilter } from "./filtersSlice";
 
 const contactsSlice = createSlice({
   name: "contacts",
-  initialState: contactsInitialState,
+  initialState: {
+    items: [],
+    loading: false,
+    error: null,
+  },
   reducers: {
     addContact: {
       reducer(state, action) {
@@ -49,12 +48,18 @@ const contactsSlice = createSlice({
   },
 });
 
-export const filteredContacts = (state) => {
-  const filter = state.filters.name.toLowerCase();
-  return state.contacts.items.filter((contact) =>
-    contact.name.toLowerCase().includes(filter)
-  );
+export const selectContacts = (state) => {
+  return state.contacts.items;
 };
+
+export const selectVisibleContacts = createSelector(
+  [selectContacts, selectNameFilter],
+  (contacts, filter) => {
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }
+);
 
 export const {
   addContact,

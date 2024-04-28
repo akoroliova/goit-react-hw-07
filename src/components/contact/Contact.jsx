@@ -6,6 +6,7 @@ import { deleteContact } from "../../redux/contactsSlice";
 
 const Contact = ({ contactId, name, number }) => {
   const dispatch = useDispatch();
+
   return (
     <div className={css.contactCardContainer}>
       <ul className={css.contactDataListElement}>

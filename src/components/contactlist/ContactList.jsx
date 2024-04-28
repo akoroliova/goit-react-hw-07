@@ -1,15 +1,14 @@
 import css from "./ContactList.module.css";
 import Contact from "../contact/Contact.jsx";
 import { useSelector } from "react-redux";
-import { filteredContacts } from "../../redux/contactsSlice.js";
+import { selectVisibleContacts } from "../../redux/contactsSlice.js";
 
 const ContactList = () => {
-  // Отримуємо частини стану
-  const items = useSelector(filteredContacts);
+  const items = useSelector(selectVisibleContacts);
 
   if (items.length > 0)
     return (
-      <div className={css.contactListContainer}>
+      <div>
         <ul className={css.contactListListElement}>
           {items.map((eachItem) => {
             const { id, name = "N/A", number = "N/A" } = eachItem;
