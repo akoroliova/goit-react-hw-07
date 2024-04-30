@@ -1,5 +1,4 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { getFilterInput } from "./filtersSlice";
+import { createSlice } from "@reduxjs/toolkit";
 import { fetchContacts, addContact, deleteContact } from "./contactsOps";
 
 const handlePending = (state) => {
@@ -18,8 +17,6 @@ const contactsSlice = createSlice({
     loading: false,
     error: null,
   },
-
-  // Додаємо обробку зовнішніх екшенів
   extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.pending, handlePending)
@@ -48,18 +45,5 @@ const contactsSlice = createSlice({
       .addCase(deleteContact.rejected, handleRejected);
   },
 });
-
-export const getContactsArray = (state) => {
-  return state.contacts.items;
-};
-
-export const selectVisibleContacts = createSelector(
-  [getContactsArray, getFilterInput],
-  (contacts, filter) => {
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
-  }
-);
 
 export const contactsReducer = contactsSlice.reducer;
