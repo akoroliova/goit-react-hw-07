@@ -2,7 +2,7 @@ import css from "./Contact.module.css";
 import { LuCat } from "react-icons/lu";
 import { LuPhone } from "react-icons/lu";
 import { useDispatch } from "react-redux";
-import { deleteContact } from "../../redux/contactsSlice";
+import { deleteContact } from "../../redux/contactsOps";
 
 const Contact = ({ contactId, name, number }) => {
   const dispatch = useDispatch();

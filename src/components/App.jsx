@@ -3,7 +3,7 @@ import ContactList from "./contactlist/ContactList.jsx";
 import SearchBox from "./searchbox/SearchBox.jsx";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import fetchContacts from "../redux/contactsOps.js";
+import { fetchContacts } from "../redux/contactsOps.js";
 
 function App() {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ function App() {
   }, [dispatch]);
 
   // Отримуємо частини стану
-  const loading = useSelector((state) => state.contacts.loading);
+  const isLoading = useSelector((state) => state.contacts.loading);
   const error = useSelector((state) => state.contacts.error);
 
   // Рендеримo розмітку в залежності від значень у стані
@@ -22,7 +22,7 @@ function App() {
       <h1>Phonebook</h1>
       <ContactForm />
       <SearchBox />
-      {loading && <p>Loading contacts...</p>}
+      {isLoading && !error && <p>Loading contacts...</p>}
       {error && <p>{error}</p>}
       <ContactList />
     </>

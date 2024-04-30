@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
-import { selectNameFilter } from "./filtersSlice";
+import { getFilterInput } from "./filtersSlice";
+import { fetchContacts, addContact, deleteContact } from "./contactsOps";
 
 const contactsSlice = createSlice({
   name: "contacts",
@@ -9,64 +9,63 @@ const contactsSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {
-    addContact: {
-      reducer(state, action) {
+
+  // Додаємо обробку зовнішніх екшенів
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchContacts.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.items = action.payload;
+      })
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(addContact.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
         state.items.push(action.payload);
-      },
-      prepare(name, number) {
-        return {
-          payload: {
-            id: nanoid(),
-            name,
-            number,
-          },
-        };
-      },
-    },
-
-    deleteContact(state, action) {
-      const index = state.items.findIndex((item) => item.id === action.payload);
-      state.items.splice(index, 1);
-    },
-
-    // Виконається в момент старту HTTP-запиту
-    fetchingInProgress(state) {
-      state.loading = true;
-    },
-    // Виконається якщо HTTP-запит завершився успішно
-    fetchingSuccess(state, action) {
-      state.loading = false;
-      state.error = null;
-      state.items = action.payload;
-    },
-    // Виконається якщо HTTP-запит завершився з помилкою
-    fetchingError(state, action) {
-      state.loading = false;
-      state.error = action.payload;
-    },
+      })
+      .addCase(addContact.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteContact.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload
+        );
+        state.items.splice(index, 1);
+      })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const selectContacts = (state) => {
+export const getContactsArray = (state) => {
   return state.contacts.items;
 };
 
 export const selectVisibleContacts = createSelector(
-  [selectContacts, selectNameFilter],
+  [getContactsArray, getFilterInput],
   (contacts, filter) => {
     return contacts.filter((contact) =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   }
 );
-
-export const {
-  addContact,
-  deleteContact,
-  fetchingInProgress,
-  fetchingSuccess,
-  fetchingError,
-} = contactsSlice.actions;
 
 export const contactsReducer = contactsSlice.reducer;
